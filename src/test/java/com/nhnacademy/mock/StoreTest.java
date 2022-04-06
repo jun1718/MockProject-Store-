@@ -1,6 +1,7 @@
 package com.nhnacademy.mock;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -17,14 +18,17 @@ class StoreTest {
 
     @BeforeEach
     void setUp() {
-        customer = new Customer(10000);
+        customer = new Customer("0004",10000);
         store = new Store();
+        store.initAccounts();
     }
 
-    @Test
-    void storePayTest() {
-        assertThat(store.pay(6000, customer)).isEqualTo(4000);
-    }
+//    @Test
+//    void storePayTest() {
+////        Customer customer = new Customer("0004",10000);
+//
+//        assertThat(store.pay(6000, customer)).isEqualTo(4000);
+//    }
 
     @DisplayName("없는 고객 테스트")
     @Test
@@ -34,7 +38,22 @@ class StoreTest {
         assertThat(store.getMemberRepository().get(testCustomer.getMemberId()))
             .isNull();
         assertThatThrownBy(() ->store.checkMemberShip(customer))
-            .isInstanceOf(ChackNoMemverException.class)
+            .isInstanceOf(CheckNoMemberException.class)
+            .hasMessage("멤버가 아닙니다.");
+    }
+    @Test
+    void storeAddAccountTest(){
+//        customer.setMemberId("0003");
+        store.addMemberRepository(customer);
+        assertThatCode(()->store.pay(5000, customer))
+            .doesNotThrowAnyException();
+
+    }
+
+    @Test
+    void storePayOfDeservingTest(){
+        assertThatThrownBy(() ->store.pay(5000, customer))
+            .isInstanceOf(CheckNoMemberException.class)
             .hasMessage("멤버가 아닙니다.");
     }
 

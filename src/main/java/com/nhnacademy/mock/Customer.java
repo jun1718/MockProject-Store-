@@ -28,4 +28,8 @@ public class Customer {
     public String getMemberId() {
         return this.memberId;
     }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
 }
