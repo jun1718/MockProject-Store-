@@ -2,8 +2,8 @@ package com.nhnacademy.mock;
 
 public class Store {
 
-    public int pay(Customer customer){
+    public int pay(int originalMoney, Customer customer){
 
-        return 3;
+        return 0;
     }
 }
