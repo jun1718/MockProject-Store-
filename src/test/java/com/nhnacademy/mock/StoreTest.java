@@ -2,12 +2,14 @@ package com.nhnacademy.mock;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 class StoreTest {
     Store store;
@@ -36,10 +38,41 @@ class StoreTest {
     }
 
 
+    @DisplayName("getAccounts 를 했을때 알맞은 반환타입이 나오는지 확인하는 테스트 이며 ,inti을 했을경우 customer 객체들이 확인하는 테스트")
     @Test
     void StoreAccountTest() {
+        getAccountFix();
+        initAccountFix();
+    }
+
+    private void initAccountFix() {
         store.initAccounts();
-        assertThat(store.getAccounts())
+        assertThat(store.getMemberRepository())
             .isNotNull();
+        assertThat(store.getMemberRepository().size()).isEqualTo(1);
+
+        Map<String, Customer> map = new HashMap<>();
+        Customer customer2 = new Customer(12452);
+        map.put("0002",customer2);
+        Store store2=mock(Store.class);
+        when(store2.getMemberRepository()).thenReturn(map);
+        assertThat(store2.getMemberRepository().get("0002").getMoney()).isEqualTo(12452);
+
+
+    }
+
+    private void getAccountFix() {
+        Store store2 = mock(Store.class);
+        Map<String, Customer> map = new HashMap<>();
+        map.put("AA",customer);
+        when(store2.getMemberRepository()).thenReturn(map);
+        store2.initAccounts();
+        assertThat(store2.getMemberRepository())
+            .isNotNull();
+    }
+
+    @Test
+    void StoreInitTest() {
+
     }
 }
