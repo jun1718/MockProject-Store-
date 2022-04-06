@@ -3,7 +3,10 @@ package com.nhnacademy.mock;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
@@ -28,14 +31,7 @@ class StoreTest {
 //
 //        assertThat(store.pay(6000, customer)).isEqualTo(4000);
 //    }
-    @Test
-    void sendSMSTest(){
-        mock(NetworkDummy.class);
-        
-        store.addMemberRepository(customer);
-        store.getAccumulation().initAccumulationPointRepository(store.getMemberRepository().keySet());
 
-    }
 
     @DisplayName("스토어 결재시 포인트 Accumulation 객체에 적립요청 확인에 대한 Test")
     @Test
@@ -126,5 +122,59 @@ class StoreTest {
         store2.initAccounts();
         assertThat(store2.getMemberRepository())
             .isNotNull();
+    }
+
+    @Test
+    void networkSmsTest() {
+        NetworkSMS sms = mock(NetworkSMS.class);
+
+        store.addMemberRepository(customer);
+        Accumulation accumulation = store.getAccumulation();
+        accumulation.initAccumulationPointRepository(store.getMemberRepository().keySet());
+        store.setNet(sms);
+
+        store.pay(2000, customer);
+
+        verify(sms).setSms(any());
+
+    }
+
+    @Test
+    void giveReceiptTest() {
+        NetworkSMS sms = mock(NetworkSMS.class);
+        store.addMemberRepository(customer);
+        Accumulation accumulation = store.getAccumulation();
+        accumulation.initAccumulationPointRepository(store.getMemberRepository().keySet());
+        store.setNet(sms);
+
+        store.pay(2000, customer);
+        assertThat(customer.getReceipts()).isNotNull();
+
+        System.out.println(customer.getReceipts());
+    }
+
+    @Test
+    void UseAccumulationPoint() {
+
+        Customer rich = new Customer("0005", 1000000);
+        NetworkSMS sms = mock(NetworkSMS.class);
+        store.addMemberRepository(rich);
+        Accumulation accumulation = store.getAccumulation();
+        accumulation.initAccumulationPointRepository(store.getMemberRepository().keySet());
+        store.setNet(sms);
+
+        store.pay(100000, rich);
+
+        store.pay(4000, rich);
+        Integer point =
+            store.getAccumulation().getAccumulationPointRepository().get(rich.getMemberId());
+
+        assertThat(point).isEqualTo(6000);
+        assertThat(rich.getMoney()).isEqualTo(900000);
+
+        store.pay(100000, rich);
+
+        assertThat(rich.getMoney()).isEqualTo(800000);
+
     }
 }
