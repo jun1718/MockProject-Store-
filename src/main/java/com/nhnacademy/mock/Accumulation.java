@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Accumulation {
+public class Accumulation{
     private Map<String, Integer> accumulationPointRepository = new HashMap<>();
 
-//    public void addAccumulationPointRepository(String memberId) {
-//        accumulationPointRepository.put(memberId, 0);
-//    }
+    public void addAccumulationPointRepository(int originalMoney, String memberId) {
+        PolicyRepository storePolicy = new StorePolicy();
+        accumulationPointRepository.put(memberId, storePolicy.cal(originalMoney));
+    }
 
     public void initAccumulationPointRepository(Set<String> memberIds) {
         for (String memberId : memberIds) {

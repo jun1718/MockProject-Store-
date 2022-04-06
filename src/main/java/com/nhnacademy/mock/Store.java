@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Store {
     private Map<String, Customer> memberRepository = new HashMap<>();
+    private Accumulation accumulation = new Accumulation();
 
     public Store() {
         initAccounts();
@@ -13,6 +14,8 @@ public class Store {
     public int pay(int originalMoney, Customer customer){
         checkMemberShip(customer);
         customer.sub(originalMoney);
+        accumulation.addAccumulationPointRepository(originalMoney,customer.getMemberId());
+
         return customer.getMoney();
     }
 
@@ -35,5 +38,9 @@ public class Store {
 
     public void addMemberRepository(Customer customer) {
         memberRepository.put(customer.getMemberId(), customer);
+    }
+
+    public Accumulation getAccumulation() {
+        return this.accumulation;
     }
 }

@@ -28,6 +28,15 @@ class StoreTest {
 //
 //        assertThat(store.pay(6000, customer)).isEqualTo(4000);
 //    }
+    @DisplayName("스토어 결재시 포인트 Accumulation 객체에 적립요청 확인에 대한 Test")
+    @Test
+    void payOfAddAccumulationPointAboutRequestTest(){
+        store.addMemberRepository(customer);
+        Accumulation accumulation = store.getAccumulation();
+        accumulation.initAccumulationPointRepository(store.getMemberRepository().keySet());
+        store.pay(2000,customer);
+        assertThat(accumulation.getAccumulationPointRepository().get(customer.getMemberId())).isEqualTo(200);
+    }
 
     @DisplayName("없는 고객 테스트")
     @Test
