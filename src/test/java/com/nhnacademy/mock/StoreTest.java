@@ -18,24 +18,35 @@ class StoreTest {
 
     @BeforeEach
     void setUp() {
-        customer = new Customer("0004",10000);
+        customer = new Customer("0004", 10000);
         store = new Store();
     }
 
-//    @Test
+    //    @Test
 //    void storePayTest() {
 ////        Customer customer = new Customer("0004",10000);
 //
 //        assertThat(store.pay(6000, customer)).isEqualTo(4000);
 //    }
+    @Test
+    void sendSMSTest(){
+        mock(NetworkDummy.class);
+        
+        store.addMemberRepository(customer);
+        store.getAccumulation().initAccumulationPointRepository(store.getMemberRepository().keySet());
+
+    }
+
     @DisplayName("스토어 결재시 포인트 Accumulation 객체에 적립요청 확인에 대한 Test")
     @Test
-    void payOfAddAccumulationPointAboutRequestTest(){
+    void payOfAddAccumulationPointAboutRequestTest() {
         store.addMemberRepository(customer);
         Accumulation accumulation = store.getAccumulation();
         accumulation.initAccumulationPointRepository(store.getMemberRepository().keySet());
-        store.pay(2000,customer);
-        assertThat(accumulation.getAccumulationPointRepository().get(customer.getMemberId())).isEqualTo(200);
+        store.pay(2000, customer);
+        assertThat(
+            accumulation.getAccumulationPointRepository().get(customer.getMemberId())).isEqualTo(
+            200);
     }
 
     @DisplayName("없는 고객 테스트")
@@ -45,22 +56,23 @@ class StoreTest {
         Customer testCustomer = new Customer(10000);
         assertThat(store.getMemberRepository().get(testCustomer.getMemberId()))
             .isNull();
-        assertThatThrownBy(() ->store.checkMemberShip(customer))
+        assertThatThrownBy(() -> store.checkMemberShip(customer))
             .isInstanceOf(CheckNoMemberException.class)
             .hasMessage("멤버가 아닙니다.");
     }
+
     @Test
-    void storeAddAccountTest(){
+    void storeAddAccountTest() {
 //        customer.setMemberId("0003");
         store.addMemberRepository(customer);
-        assertThatCode(()->store.pay(5000, customer))
+        assertThatCode(() -> store.pay(5000, customer))
             .doesNotThrowAnyException();
 
     }
 
     @Test
-    void storePayOfDeservingTest(){
-        assertThatThrownBy(() ->store.pay(5000, customer))
+    void storePayOfDeservingTest() {
+        assertThatThrownBy(() -> store.pay(5000, customer))
             .isInstanceOf(CheckNoMemberException.class)
             .hasMessage("멤버가 아닙니다.");
     }

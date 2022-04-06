@@ -3,7 +3,7 @@ package com.nhnacademy.mock;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Store {
+public class Store{
     private Map<String, Customer> memberRepository = new HashMap<>();
     private Accumulation accumulation = new Accumulation();
 
