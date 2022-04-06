@@ -17,4 +17,11 @@ public class Store {
     public Map<String, Customer> getMemberRepository() {
         return memberRepository;
     }
+
+    public boolean checkMemberShip(Customer customer) {
+        if(memberRepository.get(customer.getMemberId())==null){
+            throw new ChackNoMemverException("멤버가 아닙니다.");
+        }
+        return true;
+    }
 }
