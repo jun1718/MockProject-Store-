@@ -1,4 +1,4 @@
 package com.nhnacademy.mock;
 
-public class Store {
+public class Empty {
 }
