@@ -20,7 +20,6 @@ class StoreTest {
     void setUp() {
         customer = new Customer("0004",10000);
         store = new Store();
-        store.initAccounts();
     }
 
 //    @Test
@@ -86,7 +85,7 @@ class StoreTest {
         store.initAccounts();
         assertThat(store.getMemberRepository())
             .isNotNull();
-        assertThat(store.getMemberRepository().size()).isEqualTo(1);
+        assertThat(store.getMemberRepository().size()).isEqualTo(3);
 
         Map<String, Customer> map = new HashMap<>();
         Customer customer2 = new Customer(12452);

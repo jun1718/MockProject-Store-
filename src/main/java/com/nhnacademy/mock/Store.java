@@ -6,6 +6,10 @@ import java.util.Map;
 public class Store {
     private Map<String, Customer> memberRepository = new HashMap<>();
 
+    public Store() {
+        initAccounts();
+    }
+
     public int pay(int originalMoney, Customer customer){
         checkMemberShip(customer);
         customer.sub(originalMoney);
@@ -14,6 +18,8 @@ public class Store {
 
     public void initAccounts() {
         addMemberRepository(new Customer("0001",10000));
+        addMemberRepository(new Customer("0002",15000));
+        addMemberRepository(new Customer("0003",20000));
     }
     
     public Map<String, Customer> getMemberRepository() {
